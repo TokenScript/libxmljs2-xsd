@@ -1,11 +1,14 @@
 {
   "name": "libxmljs2-xsd",
-  "version": "0.30.1",
+  "version": "0.32.0",
   "description": "XSD 1.0 validator based on libxmljs2",
   "main": "index.js",
   "scripts": {
+    "build": "node-pre-gyp install --build-from-source",
+    "install": "node-pre-gyp install --fallback-to-build --loglevel http",
     "test": "mocha test/index.js",
-    "docs": "jsdoc2md index.js --template readme.hbs > README.md"
+    "docs": "jsdoc2md index.js --template readme.hbs > README.md",
+    "package": "node-pre-gyp package 2>&1"
   },
   "keywords": [
     "xsd",
@@ -49,15 +52,25 @@
     "url": "https://github.com/cdegalitt/libxmljs2-xsd.git"
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=16"
+  },
   "dependencies": {
-    "@mapbox/node-pre-gyp": "^1.0.9",
+    "@mapbox/node-pre-gyp": "^1.0.11",
     "bindings": "~1.5.0",
-    "nan": "~2.15.0",
-    "libxmljs2": "^0.30.1"
+    "nan": "~2.17.0",
+    "libxmljs2": "^0.32.0"
   },
   "devDependencies": {
     "mocha": "^8.1.1",
     "should": "^13.2.3",
-    "jsdoc-to-markdown": "^6.0.1"
+    "jsdoc-to-markdown": "^8.0.0"
+  },
+  "binary": {
+    "module_name": "node-libxml-xsd",
+    "module_path": "./build/Release/",
+    "host": "https://github.com",
+    "remote_path": "./TokenScript/libxmljs2-xsd/releases/download/v{version}/",
+    "package_name": "{node_abi}-{platform}-{arch}-{libc}.tar.gz"
   }
 }
