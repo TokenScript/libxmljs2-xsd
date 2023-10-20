@@ -1,5 +1,5 @@
 {
-  "name": "libxmljs2-xsd",
+  "name": "@tokenscript/libxmljs2-xsd",
   "version": "0.32.0",
   "description": "XSD 1.0 validator based on libxmljs2",
   "main": "index.js",
@@ -43,13 +43,13 @@
       "web": "https://www.galitt.com"
     }
   ],
-  "homepage": "https://github.com/cdegalitt/libxmljs2-xsd",
+  "homepage": "https://github.com/TokenScript/libxmljs2-xsd",
   "bugs": {
-    "url": "https://github.com/cdegalitt/libxmljs2-xsd/issues"
+    "url": "https://github.com/TokenScript/libxmljs2-xsd/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cdegalitt/libxmljs2-xsd.git"
+    "url": "https://github.com/TokenScript/libxmljs2-xsd.git"
   },
   "license": "MIT",
   "engines": {
