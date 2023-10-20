@@ -8,6 +8,7 @@
       "target_name": "node-libxml-xsd",
       "product_extension": "node",
       "type": "shared_library",
+      "win_delay_load_hook": "false",
       "sources": [ "src/schema.cc", "src/xml_errors.cc", "src/node_libxml_xsd.cc" ],
       "include_dirs": [
       	"<!(node -e \"require('nan')\")",
