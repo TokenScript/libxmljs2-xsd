@@ -1,0 +1,77 @@
+name: builds
+
+on:
+  push:
+    tags:
+      - v*
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2019, macos-10.15, ubuntu-20.04]
+        node: [16, 18, 19, 20]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm i -g pnpm@^8
+      - run: pnpm i --frozen-lockfile
+        env:
+          npm_config_build_from_source: true
+      - run: pnpm test
+      - run: pnpm package
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.os }}-${{ matrix.node }}-binary
+          path: 'build/**/*.tar.gz'
+  alpine:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        node: [16, 18, 19, 20]
+      fail-fast: true
+    container:
+      image: node:${{ matrix.node }}-alpine
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          apk add --no-cache python3 make g++
+      - run: npm i -g pnpm@^8
+      - run: pnpm i --frozen-lockfile
+        env:
+          npm_config_build_from_source: true
+      - run: pnpm lint
+      - run: pnpm tsd
+      - run: pnpm build
+      - run: pnpm test
+      - run: pnpm package
+      - uses: actions/upload-artifact@v3
+        with:
+          name: alpine-${{ matrix.node }}-binary
+          path: 'build/**/*.tar.gz'
+  deploy:
+    runs-on: ubuntu-20.04
+    needs: [alpine, build]
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - uses: actions/download-artifact@v2
+        with:
+          path: build
+      - id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      - uses: eine/tip@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.vars.outputs.tag }}
+          files: |
+            ./build/*/stage/TokenScript/libxmljs2-xsd/releases/download/*/*

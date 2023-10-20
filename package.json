@@ -4,8 +4,11 @@
   "description": "XSD 1.0 validator based on libxmljs2",
   "main": "index.js",
   "scripts": {
+    "build": "node-pre-gyp install --build-from-source",
+    "install": "node-pre-gyp install --fallback-to-build --loglevel http",
     "test": "mocha test/index.js",
-    "docs": "jsdoc2md index.js --template readme.hbs > README.md"
+    "docs": "jsdoc2md index.js --template readme.hbs > README.md",
+    "package": "node-pre-gyp package 2>&1"
   },
   "keywords": [
     "xsd",
@@ -62,5 +65,12 @@
     "mocha": "^8.1.1",
     "should": "^13.2.3",
     "jsdoc-to-markdown": "^8.0.0"
+  },
+  "binary": {
+    "module_name": "node-libxml-xsd",
+    "module_path": "./build/Release/",
+    "host": "https://github.com",
+    "remote_path": "./TokenScript/libxmljs2-xsd/releases/download/v{version}/",
+    "package_name": "{node_abi}-{platform}-{arch}-{libc}.tar.gz"
   }
 }
